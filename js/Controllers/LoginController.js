@@ -1,7 +1,7 @@
 
 'use strict';
 
-App.controller('LoginController', function($scope, AuthService, $route, $rootScope,$location) {
+App.controller('LoginController', function($scope,$cookieStore ,AuthService, $route, $rootScope,$location) {
 	$scope.data = {};
 	$scope.errorMessage = false;
 
@@ -45,8 +45,4 @@ App.controller('LoginController', function($scope, AuthService, $route, $rootSco
 		);
 	}
 	
-	$scope.logout = function() {
-		console.log("in logout method");
-	}
-
 });

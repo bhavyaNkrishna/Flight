@@ -40,16 +40,16 @@ pool.getConnection(function (err, connection) {
 app.post('/verifyUser', function (req, res) {
 	var uname = req.body.uname;
 	var pword = req.body.pword;
-	log.info(req);
+	//log.info(req);
 	var data = {
 			"error": 1,
 			"user": ""
 	};
 	pool.getConnection(function (err, connection) {
-		
+
 		connection.query('select * from user where username = ? and password=?',[uname,  pword], function (err, rows, fields){
-			log.info(rows);
-			
+			//log.info(rows);
+
 			if (rows!==undefined) {
 				if( rows.length !== 0 && !err) {
 					data.error = 0;
@@ -67,6 +67,46 @@ app.post('/verifyUser', function (req, res) {
 		});
 
 	});
+});
+
+
+
+app.post('/insert', function (req, res) {
+
+	var uname = req.body.uname;
+	var uemail = req.body.uemail;
+	var pword = req.body.pword;
+	var pwordCon = req.body.pwordCon;
+
+	log.info(req);
+
+	var data = {
+			"error": 1,
+			"user": ""
+	};
+	
+    log.info(pwordCon);
+	log.info('POST Request :: /insert: ');
+
+	if (!!uname && !!uemail && !!pword && !!pwordCon) {
+		pool.getConnection(function (err, connection) {
+			connection.query("INSERT INTO user SET username = ?, password = ?, email = ?,confirmpassword = ?",
+					[uname,  pword, uemail, pwordCon], function (err, rows, fields) {
+				if (!!err) {
+					data.user = "Error Adding data";
+					log.error(err);
+				} else {
+					data.error = 0;
+					data.user = "User Added Successfully";
+					log.info("Added: " + [uname, uemail]);
+				}
+				res.json(data);
+			});
+		});
+	} else {
+		data.users = "Please provide all required data (i.e : name, password)";
+		res.json(data);
+	}
 });
 
 

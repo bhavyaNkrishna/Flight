@@ -1,15 +1,15 @@
-App.factory('AuthService', ['$rootScope','$http', '$q', function($rootScope,$http, $q){
+App.factory('AuthService', ['$rootScope','$cookieStore','$http', '$q','SessionService', function($rootScope,$cookieStore,$http, $q,SessionService){
+
+	var userName = "";
 
 	var factory = {
 			loginUser: loginUser,
 			setCredentials : setCredentials,
 			clearCredentials : clearCredentials,
-
 	};
 
 	return factory;
 
-	
 	
 	function loginUser(user) {
 		
@@ -35,15 +35,21 @@ App.factory('AuthService', ['$rootScope','$http', '$q', function($rootScope,$htt
 
 	
 	 function setCredentials(username) {
+		 console.log("in set credentials");
          $rootScope.globals = {
              currentUser: {
                  username: username,
              }
          };
+         SessionService.setCookieData(username);
      }
-	
-	
+		
 	 function clearCredentials() {
          $rootScope.globals = {};
+         SessionService.clearCookieData();
+	 }
+	 
+	 function Userlog() {
+       console.log("in auth service");
 	 }
 }]);
